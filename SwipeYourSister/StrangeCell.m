@@ -68,6 +68,7 @@ static CGFloat const kBounceValue = 20.0f;
         button.frame = CGRectMake(self.frame.size.width - 50 * (buttonTitles.count - [buttonTitles indexOfObject:title]), 0, 50, self.frame.size.height);
         [button setTitle:title forState:UIControlStateNormal];
         [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:button];
         [self.contentView sendSubviewToBack:button];
         [self.buttons addObject:button];
@@ -245,6 +246,15 @@ static CGFloat const kBounceValue = 20.0f;
     
 }
 
+- (void)buttonPressed:(id)sender {
+    
+    UIButton *button = (UIButton *)sender;
+    NSString *title = [button titleForState:UIControlStateNormal];
+    if ([self.delegate respondsToSelector:@selector(strangeCellDidPressButtonWithTitle: cell:)]) {
+        [self.delegate strangeCellDidPressButtonWithTitle:title cell:self];
+    }
+}
+
 - (void)setConstraintsToShowAllButtons:(BOOL)animated notifyDelegateDidOpen:(BOOL)notifyDelegate
 {
      //TODO: Notify delegate.
@@ -253,7 +263,7 @@ static CGFloat const kBounceValue = 20.0f;
         return;
     }
     
-//    self.contentViewLeftConstraint.constant = -[self buttonTotalWidth] - kBounceValue;
+    //    self.contentViewLeftConstraint.constant = -[self buttonTotalWidth] - kBounceValue;
     CGRect rect = self.myContentView.frame;
     rect.origin.x = - [self buttonTotalWidth] - kBounceValue;
     self.myContentView.frame = rect;

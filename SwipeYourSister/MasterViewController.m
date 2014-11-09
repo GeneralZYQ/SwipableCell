@@ -10,7 +10,7 @@
 #import "DetailViewController.h"
 #import "StrangeCell.h"
 
-@interface MasterViewController ()
+@interface MasterViewController () <StrangeCellDelegate>
 
 @property NSMutableArray *objects;
 @end
@@ -72,11 +72,11 @@
     
     StrangeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
     cell.buttonTitles = @[@"编辑", @"删除"];
+    cell.delegate = self;
     
     NSDate *object = self.objects[indexPath.row];
     cell.ItemText = [object description];
     return cell;
-
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -90,6 +90,21 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    }
+}
+
+#pragma mark - StrangeCellDelegate
+
+- (void)strangeCellDidPressButtonWithTitle:(NSString *)title cell:(StrangeCell *)cell {
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    NSLog(@"the indexPath is %@" , indexPath);
+    
+    if ([title isEqualToString:@"删除"]) {
+        [self.objects removeObjectAtIndex:indexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    } else if ([title isEqualToString:@"编辑"]) {
+        //Do Anything You Want your project to do...
     }
 }
 

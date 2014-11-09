@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol StrangeCellDelegate;
+
 @interface StrangeCell : UITableViewCell
+
+@property (nonatomic, assign) id<StrangeCellDelegate> delegate;
 
 @property (nonatomic, retain) NSString *ItemText;
 
@@ -16,5 +20,11 @@
 @property (nonatomic, retain) UILabel *myTextLabel;
 
 @property (nonatomic, retain) NSArray* buttonTitles;
+
+@end
+
+@protocol StrangeCellDelegate <NSObject>
+
+- (void)strangeCellDidPressButtonWithTitle:(NSString *)title cell:(StrangeCell *)cell;
 
 @end
